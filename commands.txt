@@ -1,0 +1,1 @@
+create migration: Add-Migration <name> -OutputDir <directory>
