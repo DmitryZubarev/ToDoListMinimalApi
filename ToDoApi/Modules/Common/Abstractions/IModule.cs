@@ -1,4 +1,4 @@
-﻿namespace ToDoApi.Modules.Common.Abstractions
+﻿namespace TodoApi.Modules.Common.Abstractions
 {
     public interface IModule
     {

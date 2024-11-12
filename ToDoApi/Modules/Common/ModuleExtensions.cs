@@ -1,6 +1,6 @@
-﻿using ToDoApi.Modules.Common.Abstractions;
+﻿using TodoApi.Modules.Common.Abstractions;
 
-namespace ToDoApi.Modules.Common
+namespace TodoApi.Modules.Common
 {
     public static class ModuleExtensions
     {
@@ -19,23 +19,27 @@ namespace ToDoApi.Modules.Common
             return services;
         }
 
-        public static WebApplication MapEndpoints(this WebApplication app)
+        public static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder builder)
         {
             foreach (var module in _registeredModules)
             {
-                module.MapEndpoints(app);
+                module.MapEndpoints(builder);
             }
 
-            return app;
+            return builder;
         }
 
         private static IEnumerable<IModule> DiscoverModules()
         {
-            return typeof(IModule).Assembly
+            var neededInterface = typeof(IModule);
+
+            var modules = neededInterface.Assembly
                 .GetTypes()
-                .Where(t => t.IsClass && t.IsAssignableTo(typeof(IModule)))
+                .Where(t => t.IsClass && t.IsAssignableTo(neededInterface))
                 .Select(Activator.CreateInstance)
                 .Cast<IModule>();
+
+            return modules;
         }
     }
 }
